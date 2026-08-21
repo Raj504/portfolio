@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\StatusItem;
+use App\Support\SiteContent;
 use Database\Seeders\PortfolioSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -43,8 +45,8 @@ class HomePageTest extends TestCase
     public function test_the_status_strip_is_omitted_when_empty(): void
     {
         $this->seed(PortfolioSeeder::class);
-        \App\Models\StatusItem::query()->delete();
-        \App\Support\SiteContent::flush();
+        StatusItem::query()->delete();
+        SiteContent::flush();
 
         // No empty bordered box left behind in the hero.
         $this->get('/')->assertOk()->assertDontSee('Replies in');

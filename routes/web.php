@@ -14,7 +14,12 @@ use App\Http\Controllers\Admin\StatusItemController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TrackController;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +29,25 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-// Analytics beacons. Generous limit: a long visit sends several batches.
+/*
+ * Analytics beacons.
+ *
+ * Deliberately stateless. Running these through the session middleware cost
+ * three extra queries per beacon and, worse, took a lock on the session row --
+ * so concurrent beacons from one browser queued up behind each other. There is
+ * nothing per-user to remember here, so the whole session stack comes off.
+ *
+ * CSRF goes with it; TrackController checks the request origin instead.
+ */
 Route::post('/track', [TrackController::class, 'store'])
-    ->middleware('throttle:60,1')
+    ->withoutMiddleware([
+        EncryptCookies::class,
+        AddQueuedCookiesToResponse::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        ValidateCsrfToken::class,
+    ])
+    ->middleware('throttle:30,1')
     ->name('track');
 
 // Five messages a minute per IP is plenty for a portfolio inbox.

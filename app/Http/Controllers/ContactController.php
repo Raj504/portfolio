@@ -52,7 +52,7 @@ class ContactController extends Controller
     protected function done(): RedirectResponse
     {
         return redirect()
-            ->to(route('home') . '#contact')
+            ->to(route('home').'#contact')
             ->with('contact.success', 'Message received. I will get back to you shortly.');
     }
 }

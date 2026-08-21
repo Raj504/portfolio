@@ -19,6 +19,6 @@ class Profile extends Model
      */
     public static function current(): self
     {
-        return static::query()->first() ?? new static();
+        return static::query()->first() ?? new static;
     }
 }

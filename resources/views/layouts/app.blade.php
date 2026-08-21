@@ -9,6 +9,12 @@
     <meta name="theme-color" content="#05060a">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    {{-- Signed in as the owner: the tracker never boots, so browsing your own
+         site costs no beacons and produces no data. --}}
+    @auth
+        <meta name="analytics" content="off">
+    @endauth
+
     <title>@yield('title', $profile->name . ' — ' . $profile->role)</title>
     <meta name="description" content="{{ $profile->blurb }}">
 

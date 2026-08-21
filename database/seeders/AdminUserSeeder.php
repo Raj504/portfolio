@@ -18,16 +18,18 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        $email = config('portfolio.admin_email') ?: env('ADMIN_EMAIL');
-        $email = $email ?: 'admin@example.com';
+        // config(), never env(): env() is null under a cached config, which
+        // is the normal production state.
+        $email = config('portfolio.admin_email') ?: 'admin@example.com';
 
         if (User::where('email', $email)->exists()) {
             $this->command?->warn("Admin user {$email} already exists, leaving its password alone.");
+            $this->command?->warn('Use `php artisan admin:password` to change it.');
 
             return;
         }
 
-        $password = env('ADMIN_PASSWORD');
+        $password = config('portfolio.admin_password');
         $generated = false;
 
         if (blank($password)) {

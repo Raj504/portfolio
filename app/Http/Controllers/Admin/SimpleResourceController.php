@@ -38,7 +38,7 @@ abstract class SimpleResourceController extends AdminController
 
     public function create(): View
     {
-        return $this->form(new $this->model());
+        return $this->form(new $this->model);
     }
 
     public function store(Request $request): RedirectResponse

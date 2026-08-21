@@ -7,7 +7,9 @@ use App\Models\Social;
 class SocialController extends SimpleResourceController
 {
     protected string $model = Social::class;
+
     protected string $route = 'admin.socials';
+
     protected string $label = 'Link';
 
     protected function rules(): array

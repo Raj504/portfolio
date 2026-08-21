@@ -19,7 +19,7 @@ class SkillGroupController extends AdminController
 
     public function create(): View
     {
-        return view('admin.skills.form', ['group' => new SkillGroup()]);
+        return view('admin.skills.form', ['group' => new SkillGroup]);
     }
 
     public function store(Request $request): RedirectResponse

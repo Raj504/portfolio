@@ -5,6 +5,7 @@ namespace App\Support;
 use App\Models\Visit;
 use App\Models\VisitEvent;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -16,9 +17,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Analytics
 {
-    public function __construct(protected CarbonInterface $since)
-    {
-    }
+    public function __construct(protected CarbonInterface $since) {}
 
     /* ------------------------------------------------------------ headline */
 
@@ -34,7 +33,7 @@ class Analytics
             'Visits' => $total,
             'Engaged' => $engagedCount,
             'Avg. time' => $this->humanSeconds((int) round((clone $engaged)->avg('duration') ?? 0)),
-            'Avg. scroll' => round((clone $engaged)->avg('max_scroll') ?? 0) . '%',
+            'Avg. scroll' => round((clone $engaged)->avg('max_scroll') ?? 0).'%',
         ];
     }
 
@@ -118,7 +117,7 @@ class Analytics
             $reached = Visit::since($this->since)->engaged()->where('max_scroll', '>=', $depth)->count();
 
             return [
-                'label' => $depth . '%',
+                'label' => $depth.'%',
                 'visits' => $reached,
                 'percent' => $total > 0 ? round($reached / $total * 100) : 0,
             ];
@@ -193,7 +192,7 @@ class Analytics
     /**
      * Subquery of visit ids in the window, so event queries stay scoped.
      */
-    protected function visitIds(): \Illuminate\Database\Query\Builder
+    protected function visitIds(): Builder
     {
         return DB::table('visits')
             ->select('id')
@@ -203,9 +202,9 @@ class Analytics
     public function humanSeconds(int $seconds): string
     {
         if ($seconds < 60) {
-            return $seconds . 's';
+            return $seconds.'s';
         }
 
-        return intdiv($seconds, 60) . 'm ' . ($seconds % 60) . 's';
+        return intdiv($seconds, 60).'m '.($seconds % 60).'s';
     }
 }

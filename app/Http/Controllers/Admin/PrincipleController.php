@@ -7,7 +7,9 @@ use App\Models\Principle;
 class PrincipleController extends SimpleResourceController
 {
     protected string $model = Principle::class;
+
     protected string $route = 'admin.principles';
+
     protected string $label = 'Principle';
 
     protected function rules(): array

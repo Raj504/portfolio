@@ -16,7 +16,7 @@ class ExperienceController extends AdminController
 
     public function create(): View
     {
-        return view('admin.experiences.form', ['experience' => new Experience()]);
+        return view('admin.experiences.form', ['experience' => new Experience]);
     }
 
     public function store(Request $request): RedirectResponse

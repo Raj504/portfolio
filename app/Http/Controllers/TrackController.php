@@ -6,7 +6,6 @@ use App\Models\Visit;
 use App\Models\VisitEvent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 /**
@@ -26,10 +25,17 @@ class TrackController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        // Never record the owner browsing their own site.
-        if (Auth::check()) {
-            return response()->json(['ok' => true, 'ignored' => 'authenticated']);
+        // This route runs without the session stack, so CSRF cannot apply.
+        // An origin check is the stateless equivalent: it stops another site
+        // posting here from a visitor's browser.
+        if (! $this->fromOwnSite($request)) {
+            return response()->json(['ok' => true, 'ignored' => 'origin'], 403);
         }
+
+        // Owner exclusion happens in the browser now: the layout does not boot
+        // the tracker at all for a signed-in admin, so no beacon is sent. That
+        // check cannot live here any more -- without the session middleware
+        // there is no authenticated user to read.
 
         // Honour Do Not Track and Global Privacy Control.
         if ($request->header('DNT') === '1' || $request->header('Sec-GPC') === '1') {
@@ -41,12 +47,12 @@ class TrackController extends Controller
             'path' => ['nullable', 'string', 'max:255'],
             'referrer' => ['nullable', 'string', 'max:500'],
             'screen' => ['nullable', 'string', 'max:20'],
-            'duration' => ['nullable', 'integer', 'min:0', 'max:' . self::MAX_EVENT_SECONDS],
+            'duration' => ['nullable', 'integer', 'min:0', 'max:'.self::MAX_EVENT_SECONDS],
             'max_scroll' => ['nullable', 'integer', 'min:0', 'max:100'],
             'events' => ['nullable', 'array', 'max:100'],
-            'events.*.type' => ['required', 'string', 'in:' . implode(',', self::TYPES)],
+            'events.*.type' => ['required', 'string', 'in:'.implode(',', self::TYPES)],
             'events.*.target' => ['required', 'string', 'max:120'],
-            'events.*.value' => ['nullable', 'integer', 'min:0', 'max:' . self::MAX_EVENT_SECONDS],
+            'events.*.value' => ['nullable', 'integer', 'min:0', 'max:'.self::MAX_EVENT_SECONDS],
         ]);
 
         $visit = Visit::firstOrCreate(
@@ -54,12 +60,15 @@ class TrackController extends Controller
             [
                 'ip_hash' => $this->hashIp($request->ip()),
                 'path' => $data['path'] ?? '/',
-                'referrer' => $data['referrer'] ?: null,
+                'referrer' => $data['referrer'] ?? null,
                 'referrer_host' => $this->host($data['referrer'] ?? null),
                 'screen' => $data['screen'] ?? null,
                 'device' => $this->device($request->userAgent()),
                 'browser' => $this->browser($request->userAgent()),
                 'platform' => $this->platform($request->userAgent()),
+                // Seeded here so the opening beacon needs no follow-up UPDATE.
+                'duration' => (int) ($data['duration'] ?? 0),
+                'max_scroll' => (int) ($data['max_scroll'] ?? 0),
                 'started_at' => now(),
                 'last_seen_at' => now(),
             ]
@@ -71,7 +80,13 @@ class TrackController extends Controller
             'duration' => max($visit->duration, (int) ($data['duration'] ?? 0)),
             'max_scroll' => max($visit->max_scroll, (int) ($data['max_scroll'] ?? 0)),
             'last_seen_at' => now(),
-        ])->save();
+        ]);
+
+        // A first beacon is already correct from the insert above; only pay for
+        // an UPDATE when something actually moved.
+        if ($visit->isDirty(['duration', 'max_scroll'])) {
+            $visit->save();
+        }
 
         $rows = [];
 
@@ -93,6 +108,23 @@ class TrackController extends Controller
     }
 
     /**
+     * Stateless stand-in for CSRF: the beacon must claim to come from this
+     * site. sendBeacon always sets Origin; fetch may only set Referer. If a
+     * header is present it has to match, and requests with neither are still
+     * bounded by the rate limiter.
+     */
+    protected function fromOwnSite(Request $request): bool
+    {
+        $claimed = $request->headers->get('Origin') ?: $request->headers->get('Referer');
+
+        if (blank($claimed)) {
+            return true;
+        }
+
+        return parse_url($claimed, PHP_URL_HOST) === $request->getHost();
+    }
+
+    /**
      * One-way hash so repeat visitors can be counted without storing the IP.
      * Salted with the app key and the date, so hashes cannot be correlated
      * across days or lifted from a database dump.
@@ -103,7 +135,7 @@ class TrackController extends Controller
             return null;
         }
 
-        return hash('sha256', $ip . config('app.key') . now()->toDateString());
+        return hash('sha256', $ip.config('app.key').now()->toDateString());
     }
 
     protected function host(?string $url): ?string

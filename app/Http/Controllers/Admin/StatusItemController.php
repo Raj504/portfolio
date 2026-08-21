@@ -7,7 +7,9 @@ use App\Models\StatusItem;
 class StatusItemController extends SimpleResourceController
 {
     protected string $model = StatusItem::class;
+
     protected string $route = 'admin.status';
+
     protected string $label = 'Status item';
 
     protected function rules(): array

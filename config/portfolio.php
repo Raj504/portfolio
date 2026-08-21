@@ -13,10 +13,14 @@
 return [
 
     /*
-    | Login for the admin panel. Set ADMIN_EMAIL and ADMIN_PASSWORD in .env
-    | before running the seeder; the password is never stored in this file.
+    | Login for the admin panel, used only by AdminUserSeeder on a fresh
+    | install. Read through config() rather than env() on purpose: env() returns
+    | null once `php artisan config:cache` has run, which is exactly what
+    | production does. Prefer `php artisan admin:password` for anything after
+    | the first deploy.
     */
     'admin_email' => env('ADMIN_EMAIL'),
+    'admin_password' => env('ADMIN_PASSWORD'),
 
     'name' => 'Raj Aryan',
     'role' => 'Backend Engineer',

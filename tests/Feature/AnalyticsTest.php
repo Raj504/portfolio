@@ -117,7 +117,7 @@ class AnalyticsTest extends TestCase
         $this->assertSame(0, Visit::count());
     }
 
-    public function test_the_signed_in_owner_is_not_tracked(): void
+    public function test_the_signed_in_owner_never_boots_the_tracker(): void
     {
         $admin = User::create([
             'name' => 'Admin',
@@ -125,12 +125,51 @@ class AnalyticsTest extends TestCase
             'password' => Hash::make('secret-password-here'),
         ]);
 
+        // Owner exclusion moved into the page: /track is stateless now, so the
+        // guard has to be that no beacon is ever sent in the first place.
         $this->actingAs($admin)
-            ->postJson(route('track'), $this->payload())
+            ->get('/')
             ->assertOk()
-            ->assertJsonPath('ignored', 'authenticated');
+            ->assertSee('<meta name="analytics" content="off">', false);
+    }
+
+    public function test_a_guest_does_boot_the_tracker(): void
+    {
+        // Separate test on purpose: actingAs() stays in effect for the rest of
+        // the test it is called in, so a guest request must start clean.
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('<meta name="analytics" content="off">', false);
+    }
+
+    public function test_beacons_from_another_site_are_rejected(): void
+    {
+        $this->withHeader('Origin', 'https://evil.example')
+            ->postJson(route('track'), $this->payload())
+            ->assertStatus(403);
 
         $this->assertSame(0, Visit::count());
+    }
+
+    public function test_beacons_from_this_site_are_accepted(): void
+    {
+        $this->withHeader('Origin', 'http://localhost')
+            ->postJson(route('track'), $this->payload())
+            ->assertOk();
+
+        $this->assertSame(1, Visit::count());
+    }
+
+    public function test_the_track_route_does_not_touch_the_session(): void
+    {
+        // Sessions cost queries and, worse, lock the session row -- which made
+        // concurrent beacons queue up behind each other.
+        $middleware = collect(app('router')->getRoutes()->getByName('track')->gatherMiddleware())
+            ->map(fn ($m) => is_string($m) ? $m : '')
+            ->implode(',');
+
+        $this->assertStringNotContainsString('StartSession', $middleware);
+        $this->assertStringNotContainsString('ValidateCsrfToken', $middleware);
     }
 
     public function test_self_referrals_are_not_counted_as_traffic_sources(): void

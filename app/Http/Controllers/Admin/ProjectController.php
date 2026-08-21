@@ -16,7 +16,7 @@ class ProjectController extends AdminController
 
     public function create(): View
     {
-        return view('admin.projects.form', ['project' => new Project()]);
+        return view('admin.projects.form', ['project' => new Project]);
     }
 
     public function store(Request $request): RedirectResponse
