@@ -19,6 +19,7 @@ jobs:
           command_timeout: 10m
           script: |
             cd /home/theswarm/domains/raj.theswarmneeds.in/public_html
+            git stash
             git pull origin master
             composer install --no-dev --optimize-autoloader
             npm ci
