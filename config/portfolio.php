@@ -82,44 +82,15 @@ return [
     */
     'projects' => [
         [
-            'title' => 'Ledger Core',
-            'kind' => 'Financial ledger service',
+            'title' => 'Gym Pass Marketplace',
+            'kind' => 'Short-term gym booking platform',
             'year' => '2025',
-            'summary' => 'Double-entry ledger handling multi-currency balances with strict consistency. Idempotent writes, an append-only journal, and a reconciliation job that has never drifted.',
-            'stack' => ['Laravel', 'PostgreSQL', 'Redis', 'Kubernetes'],
-            'metrics' => ['12M+ entries', 'p99 40ms', 'Zero drift'],
-            'live_url' => null,   // e.g. 'https://demo.example.com'
-            'repo_url' => null,   // e.g. 'https://github.com/you/repo'
-        ],
-        [
-            'title' => 'Fanout',
-            'kind' => 'Webhook delivery platform',
-            'year' => '2024',
-            'summary' => 'At-least-once webhook delivery with exponential backoff, per-tenant rate limiting and a dead-letter queue you can actually replay from a dashboard.',
-            'stack' => ['Go', 'Redis Streams', 'Postgres', 'Docker'],
-            'metrics' => ['8M events/day', '99.99% delivery', '6 retry tiers'],
-            'live_url' => null,   // e.g. 'https://demo.example.com'
-            'repo_url' => null,   // e.g. 'https://github.com/you/repo'
-        ],
-        [
-            'title' => 'Querysmith',
-            'kind' => 'Query performance toolkit',
-            'year' => '2024',
-            'summary' => 'Laravel package that traces N+1 queries, flags missing indexes from real traffic, and ships a slow-query budget you can fail CI on.',
-            'stack' => ['PHP', 'Laravel', 'MySQL', 'OpenTelemetry'],
-            'metrics' => ['70% fewer queries', 'CI gate', 'Open source'],
-            'live_url' => null,   // e.g. 'https://demo.example.com'
-            'repo_url' => null,   // e.g. 'https://github.com/you/repo'
-        ],
-        [
-            'title' => 'Gatekeep',
-            'kind' => 'Auth & permissions service',
-            'year' => '2023',
-            'summary' => 'Centralised OAuth2 and fine-grained permission service for a multi-tenant SaaS. Token introspection cached at the edge, policies evaluated in under a millisecond.',
-            'stack' => ['Laravel', 'Redis', 'JWT', 'Nginx'],
-            'metrics' => ['200k users', '0.8ms policy eval', 'SOC2 ready'],
-            'live_url' => null,   // e.g. 'https://demo.example.com'
-            'repo_url' => null,   // e.g. 'https://github.com/you/repo'
+            'summary' => 'A marketplace where travellers across India can book a gym for exactly how long they need - one day, three days, a week or a month. Pay by UPI and walk in with a booking reference. No full-month fees, no phone calls, no cash.',
+            'stack' => ['Laravel', 'MySQL', 'UPI payments'],
+            // Capabilities, not invented metrics. Only claim what is true.
+            'metrics' => ['Passes from 1 day', 'UPI payments', 'Walk-in booking reference'],
+            'live_url' => 'https://gym.theswarmneeds.in',
+            'repo_url' => null,
         ],
     ],
 

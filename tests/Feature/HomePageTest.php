@@ -19,7 +19,7 @@ class HomePageTest extends TestCase
         $this->get('/')
             ->assertOk()
             ->assertSee(config('portfolio.name'))
-            ->assertSee('Ledger Core')          // a project
+            ->assertSee('Gym Pass Marketplace')  // a project
             ->assertSee('Boring on purpose')    // a principle
             ->assertSee('Senior Backend Engineer'); // an experience
     }

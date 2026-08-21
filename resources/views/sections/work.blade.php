@@ -39,7 +39,7 @@
 
             <div class="max-w-xs" data-reveal="fade">
                 <p class="font-mono text-xs leading-relaxed tracking-wide text-faint">
-                    Numbers below are from production, not benchmarks.
+                    Built and maintained end to end, from schema to deploy.
                 </p>
                 @if ($projects->count() > 3)
                     <p class="mt-3 font-mono text-xs tracking-widest text-cyan-glow uppercase">
@@ -86,7 +86,7 @@
                     {{-- Metrics stack vertically here rather than in a row. --}}
                     <div class="lg:col-span-5">
                         <div class="flex items-baseline justify-between border-b border-edge pb-4">
-                            <span class="font-mono text-[10px] tracking-widest text-faint uppercase">In production</span>
+                            <span class="font-mono text-[10px] tracking-widest text-faint uppercase">What it does</span>
                             <span class="font-mono text-xs text-faint">{{ $project->year }}</span>
                         </div>
 

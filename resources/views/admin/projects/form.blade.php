@@ -30,8 +30,8 @@
             <x-admin.input name="stack" :value="implode(', ', $project->stack ?? [])"
                            hint="Comma separated. e.g. Laravel, Redis, Docker" />
 
-            <x-admin.input name="metrics" :value="implode(', ', $project->metrics ?? [])"
-                           hint="Comma separated, three work best. e.g. 8M events/day, p99 40ms, Zero drift" />
+            <x-admin.input name="metrics" label="Highlights" :value="implode(', ', $project->metrics ?? [])"
+                           hint="Comma separated, three work best. Capabilities or real numbers — only what you can back up. e.g. Passes from 1 day, UPI payments, QR check-in" />
 
             <div class="grid gap-6 sm:grid-cols-2">
                 <x-admin.input name="sort_order" type="number" :value="$project->sort_order ?? 0"
