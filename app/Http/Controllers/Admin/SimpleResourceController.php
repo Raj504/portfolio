@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 /**
- * Socials, stats and principles are all the same shape: a short ordered list
+ * Socials, status items and principles are all the same shape: a short ordered list
  * of two or three plain text fields. They share one controller body and differ
  * only in the properties below.
  */

@@ -1,4 +1,4 @@
-{{-- Shared list view for socials, stats and principles. --}}
+{{-- Shared list view for socials, status items and principles. --}}
 @extends('admin.layout')
 
 @section('title', Str::plural($label))

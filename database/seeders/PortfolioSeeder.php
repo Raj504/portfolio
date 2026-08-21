@@ -9,7 +9,7 @@ use App\Models\Project;
 use App\Models\Skill;
 use App\Models\SkillGroup;
 use App\Models\Social;
-use App\Models\Stat;
+use App\Models\StatusItem;
 use Illuminate\Database\Seeder;
 
 /**
@@ -43,9 +43,9 @@ class PortfolioSeeder extends Seeder
             Social::create($social + ['sort_order' => $i]);
         }
 
-        Stat::query()->delete();
-        foreach ($config['stats'] as $i => $stat) {
-            Stat::create($stat + ['sort_order' => $i]);
+        StatusItem::query()->delete();
+        foreach ($config['status'] as $i => $item) {
+            StatusItem::create($item + ['sort_order' => $i]);
         }
 
         Principle::query()->delete();

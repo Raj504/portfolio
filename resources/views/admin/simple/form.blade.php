@@ -1,4 +1,4 @@
-{{-- Shared form for socials, stats and principles. --}}
+{{-- Shared form for socials, status items and principles. --}}
 @extends('admin.layout')
 
 @section('title', ($item->exists ? 'Edit ' : 'New ') . Str::lower($label))

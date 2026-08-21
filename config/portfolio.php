@@ -40,11 +40,15 @@ return [
         ['label' => 'X',        'url' => 'https://x.com/'],
     ],
 
-    'stats' => [
-        ['value' => '4+',    'label' => 'Years building backends'],
-        ['value' => '40+',   'label' => 'APIs shipped'],
-        ['value' => '99.9%', 'label' => 'Uptime maintained'],
-        ['value' => '<80ms', 'label' => 'Median API latency'],
+    /*
+    | Hero status strip. Short, current, checkable facts -- not vanity metrics.
+    | Keep values under ~40 characters so they stay on one or two lines.
+    */
+    'status' => [
+        ['label' => 'Currently',   'value' => 'Building a webhook delivery platform'],
+        ['label' => 'Based in',    'value' => 'India, IST (UTC+5:30)'],
+        ['label' => 'Working in',  'value' => 'Laravel, Postgres, Go'],
+        ['label' => 'Replies in',  'value' => 'Usually within a day'],
     ],
 
     /*

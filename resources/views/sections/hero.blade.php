@@ -43,16 +43,31 @@
             </div>
         </div>
 
-        {{-- Stat strip --}}
-        <dl class="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-edge bg-edge lg:grid-cols-4"
-            data-reveal="up">
-            @foreach ($site->stats() as $stat)
-                <div class="spotlight relative bg-ink px-6 py-7 transition-colors duration-500">
-                    <dt class="font-mono text-[11px] tracking-widest text-faint uppercase">{{ $stat->label }}</dt>
-                    <dd class="mt-2 font-mono text-3xl font-semibold text-bright">{{ $stat->value }}</dd>
-                </div>
-            @endforeach
-        </dl>
+        {{-- Status strip: current, checkable facts rather than vanity metrics. --}}
+        @if ($site->statusItems()->isNotEmpty())
+            <dl class="mt-20 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-edge bg-edge
+                       sm:grid-cols-2 lg:grid-cols-4"
+                data-reveal="up">
+                @foreach ($site->statusItems() as $item)
+                    <div class="spotlight relative flex flex-col bg-ink px-6 py-6 transition-colors duration-500"
+                         data-spotlight>
+                        <dt class="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-faint uppercase">
+                            {{-- Only the first item gets the live dot, so it reads
+                                 as "right now" rather than four blinking lights. --}}
+                            @if ($loop->first)
+                                <span class="animate-pulse-dot h-1.5 w-1.5 rounded-full bg-cyan-glow"
+                                      aria-hidden="true"></span>
+                            @endif
+                            {{ $item->label }}
+                        </dt>
+
+                        <dd class="mt-2 text-[15px] leading-snug font-medium text-bright">
+                            {{ $item->value }}
+                        </dd>
+                    </div>
+                @endforeach
+            </dl>
+        @endif
     </div>
 
     {{-- Scroll hint --}}

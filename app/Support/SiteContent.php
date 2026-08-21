@@ -8,7 +8,7 @@ use App\Models\Profile;
 use App\Models\Project;
 use App\Models\SkillGroup;
 use App\Models\Social;
-use App\Models\Stat;
+use App\Models\StatusItem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -27,7 +27,7 @@ class SiteContent
     protected const KEYS = [
         'site.profile',
         'site.socials',
-        'site.stats',
+        'site.status',
         'site.principles',
         'site.skills',
         'site.projects',
@@ -44,9 +44,9 @@ class SiteContent
         return $this->remember('site.socials', fn () => Social::ordered()->get());
     }
 
-    public function stats(): Collection
+    public function statusItems(): Collection
     {
-        return $this->remember('site.stats', fn () => Stat::ordered()->get());
+        return $this->remember('site.status', fn () => StatusItem::ordered()->get());
     }
 
     public function principles(): Collection

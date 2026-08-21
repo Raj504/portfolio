@@ -7,7 +7,7 @@
         'admin.experiences.index' => 'Experience',
         'admin.skills.index' => 'Skills',
         'admin.principles.index' => 'Principles',
-        'admin.stats.index' => 'Stats',
+        'admin.status.index' => 'Status strip',
         'admin.socials.index' => 'Links',
         'admin.messages.index' => 'Messages',
     ];

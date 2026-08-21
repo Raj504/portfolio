@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\SkillGroupController;
 use App\Http\Controllers\Admin\SocialController;
-use App\Http\Controllers\Admin\StatController;
+use App\Http\Controllers\Admin\StatusItemController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TrackController;
@@ -63,7 +63,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('experiences', ExperienceController::class)->except('show');
         Route::resource('skills', SkillGroupController::class)->except('show');
         Route::resource('socials', SocialController::class)->except('show');
-        Route::resource('stats', StatController::class)->except('show');
+        Route::resource('status', StatusItemController::class)->except('show');
         Route::resource('principles', PrincipleController::class)->except('show');
 
         Route::get('messages', [MessageController::class, 'index'])->name('messages.index');

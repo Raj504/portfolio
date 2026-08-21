@@ -29,6 +29,27 @@ class HomePageTest extends TestCase
         $this->get('/')->assertOk();
     }
 
+    public function test_the_hero_status_strip_renders(): void
+    {
+        $this->seed(PortfolioSeeder::class);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Currently')
+            ->assertSee('Building a webhook delivery platform')
+            ->assertSee('Replies in');
+    }
+
+    public function test_the_status_strip_is_omitted_when_empty(): void
+    {
+        $this->seed(PortfolioSeeder::class);
+        \App\Models\StatusItem::query()->delete();
+        \App\Support\SiteContent::flush();
+
+        // No empty bordered box left behind in the hero.
+        $this->get('/')->assertOk()->assertDontSee('Replies in');
+    }
+
     public function test_contact_validation_rejects_a_short_message(): void
     {
         $this->post(route('contact.store'), [
