@@ -25,7 +25,7 @@ class ContactController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email:rfc', 'max:150'],
             'subject' => ['required', 'string', 'max:150'],
-            'message' => ['required', 'string', 'min:20', 'max:4000'],
+            'message' => ['required', 'string', 'min:5', 'max:4000'],
         ]);
 
         // Store first: the inbox in the admin panel is the durable record,
