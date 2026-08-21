@@ -58,9 +58,24 @@ class HomePageTest extends TestCase
             'name' => 'Jane',
             'email' => 'jane@example.com',
             'subject' => 'Hi',
-            'message' => 'too short',
+            // The rule is min:5, so this has to be shorter than that.
+            'message' => 'hi',
         ])->assertSessionHasErrors('message');
 
         $this->assertDatabaseCount('contact_messages', 0);
+    }
+
+    public function test_a_short_message_is_accepted_and_reaches_the_admin_inbox(): void
+    {
+        // min:5 is deliberate -- whatever a visitor types should land in the
+        // admin panel rather than being bounced for being too brief.
+        $this->post(route('contact.store'), [
+            'name' => 'Jane',
+            'email' => 'jane@example.com',
+            'subject' => 'Hi',
+            'message' => 'Call me',
+        ])->assertSessionHasNoErrors();
+
+        $this->assertDatabaseCount('contact_messages', 1);
     }
 }
