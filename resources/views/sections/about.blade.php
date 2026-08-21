@@ -77,12 +77,11 @@
                         When it is done well, users never think about it once.
                     </p>
                     <p>
-                        My default is
-                        <span class="text-bright">Laravel and PHP</span>, reaching for
-                        <span class="text-bright">Go</span> when a service needs to be small and fast,
-                        and <span class="text-bright">Postgres</span> for anything where correctness matters
-                        more than convenience. I like tracing a slow endpoint down to the exact query,
-                        and I like deleting code more than writing it.
+                        <span class="text-bright">PHP and Laravel</span> are my default.
+                        <span class="text-bright">MySQL</span> is where most of the real thinking
+                        happens &mdash; schema design, the right indexes, and queries that still
+                        behave once the table gets big. I like tracing a slow endpoint down to the
+                        exact query, and I like deleting code more than writing it.
                     </p>
                 </div>
 

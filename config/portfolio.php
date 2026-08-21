@@ -51,7 +51,7 @@ return [
     'status' => [
         ['label' => 'Currently',   'value' => 'Building a webhook delivery platform'],
         ['label' => 'Based in',    'value' => 'India, IST (UTC+5:30)'],
-        ['label' => 'Working in',  'value' => 'Laravel, Postgres, Go'],
+        ['label' => 'Working in',  'value' => 'PHP, Laravel, MySQL'],
         ['label' => 'Replies in',  'value' => 'Usually within a day'],
     ],
 
