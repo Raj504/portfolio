@@ -1,4 +1,7 @@
-<section id="stack" class="relative px-6 py-28 lg:px-10 lg:py-40">
+{{-- overflow-hidden matters: the decorative bloom below is 36rem wide and
+     would otherwise stick out past a phone-width viewport, widening the layout
+     viewport and pushing the fixed nav's menu button off screen. --}}
+<section id="stack" class="relative overflow-hidden px-6 py-28 lg:px-10 lg:py-40">
 
     {{-- Ambient bloom behind the cards --}}
     <div class="pointer-events-none absolute top-1/2 left-1/2 -z-[5] h-[36rem] w-[36rem]

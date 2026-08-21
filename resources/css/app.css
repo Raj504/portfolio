@@ -37,6 +37,14 @@
         background-color: var(--color-void);
         color-scheme: dark;
         -webkit-font-smoothing: antialiased;
+
+        /* Belt and braces against sideways overflow. On phones anything wider
+           than the screen expands the *layout* viewport, and a fixed,
+           width:100% header then sizes to that instead of the visible width --
+           which silently pushes the menu button off the right edge.
+           `clip` rather than `hidden` so this does not become a scroll
+           container, which would fight Lenis. */
+        overflow-x: clip;
     }
 
     /* Lenis drives scrolling; native smooth scroll would fight it. */
